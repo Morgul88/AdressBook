@@ -1,5 +1,7 @@
 ﻿
 using AdressBook.Interface;
+using AdressBook.Models;
+using System.ComponentModel.Design;
 
 
 namespace AdressBook.Services;
@@ -7,14 +9,22 @@ namespace AdressBook.Services;
 public class ContactsServices : IContactsServices
 {
     private static readonly List<IContacts> _contactList = [];
-    int count = 0;
-    
-    public void AddContact(IContacts contact)
-    {
-        count++;
-        Console.Write(count); _contactList.Add(contact); 
-    }
+    public static int _contactIdCounter = 1;
 
+    public bool AddContact(IContacts contact)
+    {
+        if (_contactList != null)
+        {
+            _contactList.Add(contact);
+            return true;
+        }
+        else
+            return false;
+    }
+    public void Savefile()
+    {
+
+    }
     public bool RemoveContact(string mail)
     {
         var findContact = _contactList.Find(x => x.Email == mail.Trim());
@@ -33,8 +43,9 @@ public class ContactsServices : IContactsServices
     {
         foreach (var contact in _contactList)
         {
+            Console.WriteLine($" Id number: #{contact.Id}");
             Console.WriteLine($"Name: {contact.FirstName}");
-            Console.WriteLine($"Phone :{contact.PhoneNumber}");
+            Console.WriteLine($"Phone:{contact.PhoneNumber}");
             Console.WriteLine($"Adress: {contact.HomeAdress}");
             Console.WriteLine($"Email: {contact.Email}");
             Console.WriteLine("-----------------------------------------------------------------");

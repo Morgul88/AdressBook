@@ -1,6 +1,7 @@
 ﻿
 using AdressBook.Interface;
 using AdressBook.Models;
+using System.Security.Cryptography;
 
 namespace AdressBook.Services;
 public class MenuServices : IMenuServices
@@ -8,6 +9,7 @@ public class MenuServices : IMenuServices
     
 
     private readonly IContactsServices _contactsServices = new ContactsServices();
+    
     public void ShowMainMenu()
     {
         while (true)
@@ -24,7 +26,9 @@ public class MenuServices : IMenuServices
             Console.WriteLine();
             Console.WriteLine(" 4. REMOVE CONTACT");
             Console.WriteLine();
-            Console.WriteLine(" 5. EXIT");
+            Console.WriteLine(" 5. SAVE CONTACTS");
+            Console.WriteLine();
+            Console.WriteLine(" 6. EXIT");
             Console.WriteLine();    
             Console.Write("What would you like to do? :");
             var answer = Console.ReadLine();  
@@ -47,6 +51,9 @@ public class MenuServices : IMenuServices
                     ShowRemoveContactMenu();                   
                     break;
                 case "5":
+                    ShowSaveMenu();
+                    break;
+                case "6":
                     ExitApplication();
                     break;
                 default:
@@ -59,11 +66,29 @@ public class MenuServices : IMenuServices
         }
         
     }
+    public void ShowSaveMenu()
+    {
+        Console.WriteLine("Vill du spara dina kontakter? y/n");
+        var answer = Console.ReadLine()!.ToLower() ;
+        if(answer == "y")
+        {
+            _contactsServices.SaveFile();
+
+        }
+        else
+        {
+            Console.WriteLine();
+        }
+    }
     public void ShowAddMenu()
     {
+        
         IContacts contacts = new Contacts();
+        contacts.Id = ContactsServices._contactIdCounter++;
+
         Console.Clear();
         Display("Add Menu");
+        
         Console.WriteLine();
         Console.WriteLine("First Name:");
         contacts.FirstName = Console.ReadLine()!;
@@ -73,14 +98,24 @@ public class MenuServices : IMenuServices
         contacts.Email = Console.ReadLine()!;
         Console.WriteLine("Adress:");
         contacts.HomeAdress = Console.ReadLine()!;
-
-        _contactsServices.AddContact(contacts);
         
+        
+        if (_contactsServices.AddContact(contacts))
+        {
+            Console.WriteLine("Contact has been added.");
+        }
+        else
+        {
+            Console.WriteLine("Something went wrong. Plz try again !");
+        }
+        Console.ReadKey();
     }
     private void ShowAllUsersMenu()
     {
+        IContacts contacts = new Contacts();
         Console.Clear();
         Display("CONTACTS:");
+
         _contactsServices.ViewAllContacts();
         Console.ReadKey();
     }
