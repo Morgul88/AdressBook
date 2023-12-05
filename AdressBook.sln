@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34309.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdressBook", "AdressBook\AdressBook.csproj", "{4A77ABAC-D259-4D42-BB50-198EB0FFD7D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdressBook.Tests", "AdressBook.Tests\AdressBook.Tests.csproj", "{26A8F91D-57BC-48DA-ACBE-9425680D5A6A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4A77ABAC-D259-4D42-BB50-198EB0FFD7D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A77ABAC-D259-4D42-BB50-198EB0FFD7D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A77ABAC-D259-4D42-BB50-198EB0FFD7D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A77ABAC-D259-4D42-BB50-198EB0FFD7D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26A8F91D-57BC-48DA-ACBE-9425680D5A6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26A8F91D-57BC-48DA-ACBE-9425680D5A6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26A8F91D-57BC-48DA-ACBE-9425680D5A6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26A8F91D-57BC-48DA-ACBE-9425680D5A6A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BCC17C65-2BF7-4BC6-B859-FAA130B9655D}
+	EndGlobalSection
+EndGlobal
