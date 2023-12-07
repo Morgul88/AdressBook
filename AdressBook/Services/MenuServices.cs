@@ -1,15 +1,11 @@
 ﻿
 using AdressBook.Interface;
 using AdressBook.Models;
-using System.Security.Cryptography;
 
 namespace AdressBook.Services;
 public class MenuServices : IMenuServices
 {
-    
-
     private readonly IContactsServices _contactsServices = new ContactsServices();
-    
     public void ShowMainMenu()
     {
         while (true)
@@ -25,8 +21,6 @@ public class MenuServices : IMenuServices
             Console.WriteLine(" 3. VIEW CONTACT");
             Console.WriteLine();
             Console.WriteLine(" 4. REMOVE CONTACT");
-            Console.WriteLine();
-            Console.WriteLine(" 5. SAVE CONTACTS");
             Console.WriteLine();
             Console.WriteLine(" 6. EXIT");
             Console.WriteLine();    
@@ -50,40 +44,19 @@ public class MenuServices : IMenuServices
                 case "4":
                     ShowRemoveContactMenu();                   
                     break;
-                case "5":
-                    ShowSaveMenu();
-                    break;
+                
                 case "6":
                     ExitApplication();
                     break;
                 default:
                     Console.WriteLine("Invalid option");
-                    break;
-                        
-
+                    break;     
             }
-
-        }
-        
-    }
-    public void ShowSaveMenu()
-    {
-        Console.WriteLine("Vill du spara dina kontakter? y/n");
-        var answer = Console.ReadLine()!.ToLower() ;
-        if(answer == "y")
-        {
-            _contactsServices.SaveFile();
-
-        }
-        else
-        {
-            Console.WriteLine();
         }
     }
     public void ShowAddMenu()
     {
-        
-        IContacts contacts = new Contacts();
+        Contacts contacts = new Contacts();
         contacts.Id = ContactsServices._contactIdCounter++;
 
         Console.Clear();
@@ -99,7 +72,6 @@ public class MenuServices : IMenuServices
         Console.WriteLine("Adress:");
         contacts.HomeAdress = Console.ReadLine()!;
         
-        
         if (_contactsServices.AddContact(contacts))
         {
             Console.WriteLine("Contact has been added.");
@@ -112,13 +84,24 @@ public class MenuServices : IMenuServices
     }
     private void ShowAllUsersMenu()
     {
-        IContacts contacts = new Contacts();
         Console.Clear();
         Display("CONTACTS:");
 
-        _contactsServices.ViewAllContacts();
+        IEnumerable<Contacts> contacts = _contactsServices.GetContactsFromList();
+        
+        foreach (var contact in contacts)
+        {
+            Console.WriteLine($"Id: {contact.Id}");
+            Console.WriteLine($"FirstName: {contact.FirstName}");
+            Console.WriteLine($"Phone: {contact.PhoneNumber}");
+            Console.WriteLine($"Email: {contact.Email}");
+            Console.WriteLine($"HomeAdress: {contact.HomeAdress}");
+            Console.WriteLine("-----------------------------------");
+        }
+
         Console.ReadKey();
     }
+
     private void ShowOneUserMenu()
     {
         Console.Clear();

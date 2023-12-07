@@ -1,29 +1,30 @@
 ﻿
 using AdressBook.Interface;
 using AdressBook.Models;
-using System.ComponentModel.Design;
-
+using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace AdressBook.Services;
 
 public class ContactsServices : IContactsServices
 {
-    private static readonly List<IContacts> _contactList = [];
+    private readonly IFileService _fileService = new FileService(@"C:\Projects\AdressBook\content.json");
+    public List<Contacts> _contactList = [];
     public static int _contactIdCounter = 1;
 
-    public bool AddContact(IContacts contact)
+    public bool AddContact(Contacts contact)
     {
-        if (_contactList != null)
+        try
         {
             _contactList.Add(contact);
+            _fileService.SaveContentToFile(JsonConvert.SerializeObject(_contactList));
             return true;
         }
-        else
-            return false;
-    }
-    public void Savefile()
-    {
-
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+        return false;
     }
     public bool RemoveContact(string mail)
     {
@@ -35,23 +36,27 @@ public class ContactsServices : IContactsServices
         }
         else
             return false;
-            
-            
     }
-
-    public void ViewAllContacts()
+    public IEnumerable<Contacts> GetContactsFromList()
     {
-        foreach (var contact in _contactList)
+        try
         {
-            Console.WriteLine($" Id number: #{contact.Id}");
-            Console.WriteLine($"Name: {contact.FirstName}");
-            Console.WriteLine($"Phone:{contact.PhoneNumber}");
-            Console.WriteLine($"Adress: {contact.HomeAdress}");
-            Console.WriteLine($"Email: {contact.Email}");
-            Console.WriteLine("-----------------------------------------------------------------");
-        }
-    }
+            var content = _fileService.GetContentFromFile();
+            if (!string.IsNullOrEmpty(content))
+            {
+                _contactList = JsonConvert.DeserializeObject<List<Contacts>>(content)!;
 
+                
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+
+        // Om något går fel eller om det inte finns några kontakter returnerar vi en tom lista.
+        return _contactList;
+    }
     public void ViewOneContact(string mail)
     {
         var findContact = _contactList.Find(x => x.Email == mail.Trim()); ;

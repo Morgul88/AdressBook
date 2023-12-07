@@ -4,11 +4,11 @@ namespace AdressBook.Interface
 {
     public interface IContactsServices
     {
-        bool AddContact(IContacts contact);
+        bool AddContact(Contacts contact);
         bool RemoveContact(string mail);
-        void ViewAllContacts();
+       
         void ViewOneContact(string mail);
 
-        void SaveFile();
+        IEnumerable<Contacts> GetContactsFromList();
     }
 }
