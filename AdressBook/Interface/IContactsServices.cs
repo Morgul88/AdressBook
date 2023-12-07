@@ -9,6 +9,6 @@ namespace AdressBook.Interface
        
         void ViewOneContact(string mail);
 
-        IEnumerable<Contacts> GetContactsFromList();
+        IEnumerable<IContacts> GetContactsFromList();
     }
 }

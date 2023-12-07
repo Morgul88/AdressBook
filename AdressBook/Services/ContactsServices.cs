@@ -9,7 +9,7 @@ namespace AdressBook.Services;
 public class ContactsServices : IContactsServices
 {
     private readonly IFileService _fileService = new FileService(@"C:\Projects\AdressBook\content.json");
-    public List<Contacts> _contactList = [];
+    public List<IContacts> _contactList = [];
     public static int _contactIdCounter = 1;
 
     public bool AddContact(Contacts contact)
@@ -17,7 +17,14 @@ public class ContactsServices : IContactsServices
         try
         {
             _contactList.Add(contact);
-            _fileService.SaveContentToFile(JsonConvert.SerializeObject(_contactList));
+
+            var settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+                // Lägg till andra inställningar om det behövs
+            };
+
+            _fileService.SaveContentToFile(JsonConvert.SerializeObject(_contactList, settings));
             return true;
         }
         catch (Exception ex)
@@ -37,15 +44,22 @@ public class ContactsServices : IContactsServices
         else
             return false;
     }
-    public IEnumerable<Contacts> GetContactsFromList()
+    public IEnumerable<IContacts> GetContactsFromList()
     {
         try
         {
+            //Hämtar info från min fil på datorn
             var content = _fileService.GetContentFromFile();
+            //Om filen finns går jag in i if
+            var settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+                Formatting = Formatting.Indented,
+            };
             if (!string.IsNullOrEmpty(content))
             {
-                _contactList = JsonConvert.DeserializeObject<List<Contacts>>(content)!;
-
+                _contactList = JsonConvert.DeserializeObject<List<IContacts>>(content,settings)!;
+                
                 
             }
         }
@@ -55,7 +69,7 @@ public class ContactsServices : IContactsServices
         }
 
         // Om något går fel eller om det inte finns några kontakter returnerar vi en tom lista.
-        return _contactList;
+        return (IEnumerable<IContacts>)_contactList;
     }
     public void ViewOneContact(string mail)
     {

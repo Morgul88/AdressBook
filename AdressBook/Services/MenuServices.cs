@@ -87,7 +87,7 @@ public class MenuServices : IMenuServices
         Console.Clear();
         Display("CONTACTS:");
 
-        IEnumerable<Contacts> contacts = _contactsServices.GetContactsFromList();
+        IEnumerable<IContacts> contacts = _contactsServices.GetContactsFromList();
         
         foreach (var contact in contacts)
         {

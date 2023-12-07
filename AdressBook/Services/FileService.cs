@@ -2,6 +2,8 @@
 
 using AdressBook.Interface;
 using System.Diagnostics;
+using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace AdressBook.Services;
 
@@ -32,9 +34,11 @@ public class FileService: IFileService
     }
     public bool SaveContentToFile(string content)
     {
+        
         try
         {
-            using (var sw = new StreamWriter(_filePath))
+            
+            using (var sw = new StreamWriter(_filePath)) 
             {
                 sw.WriteLine(content);
             }
