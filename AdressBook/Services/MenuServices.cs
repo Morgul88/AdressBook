@@ -87,17 +87,24 @@ public class MenuServices : IMenuServices
         Console.Clear();
         Display("CONTACTS:");
 
-        IEnumerable<IContacts> contacts = _contactsServices.GetContactsFromList();
-        
-        foreach (var contact in contacts)
+        List<IContacts> contacts = _contactsServices.GetContactsFromList();
+        if (contacts.Count > 0) 
         {
-            Console.WriteLine($"Id: {contact.Id}");
-            Console.WriteLine($"FirstName: {contact.FirstName}");
-            Console.WriteLine($"Phone: {contact.PhoneNumber}");
-            Console.WriteLine($"Email: {contact.Email}");
-            Console.WriteLine($"HomeAdress: {contact.HomeAdress}");
-            Console.WriteLine("-----------------------------------");
+            foreach (var contact in contacts)
+            {
+                Console.WriteLine($"Id: {contact.Id}");
+                Console.WriteLine($"FirstName: {contact.FirstName}");
+                Console.WriteLine($"Phone: {contact.PhoneNumber}");
+                Console.WriteLine($"Email: {contact.Email}");
+                Console.WriteLine($"HomeAdress: {contact.HomeAdress}");
+                Console.WriteLine("-----------------------------------");
+            }
         }
+        else 
+        {
+            Console.WriteLine("The list is empty. Press any button to continue..");
+        }
+       
 
         Console.ReadKey();
     }
@@ -115,6 +122,7 @@ public class MenuServices : IMenuServices
     }
     private void ShowRemoveContactMenu()
     {
+        
         Console.Clear();
         Display("REMOVE CONTACT");
         Console.WriteLine("Insert email: ");
@@ -123,6 +131,7 @@ public class MenuServices : IMenuServices
         if (_contactsServices.RemoveContact(answer))
         {
             Console.WriteLine("Contact removed successfully.");
+            
         }
         else
         {

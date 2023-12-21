@@ -1,27 +1,39 @@
 ﻿
 using AdressBook.Interface;
-using AdressBook.Models;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using AdressBook.Models;
 
 namespace AdressBook.Services;
 
+
 public class ContactsServices : IContactsServices
 {
+    // En privat instansvariabel för att använda IFileService-gränssnittet
     private readonly IFileService _fileService = new FileService(@"C:\Projects\AdressBook\content.json");
+
+    // En lista som innehåller kontakter (implementerar IContacts-gränssnittet)
     public List<IContacts> _contactList = [];
+
+    // En statisk variabel för att hålla reda på kontakt-ID
     public static int _contactIdCounter = 1;
 
     public bool AddContact(Contacts contact)
     {
         try
         {
+            // Hämtar befintliga kontakter från filen
+            List<IContacts> contacts = GetContactsFromList();
+
+            // Lägger till den nya kontakten i listan
             _contactList.Add(contact);
 
+            // Ställer in inställningar för att hantera typer automatiskt
             var settings = new JsonSerializerSettings
             {
+                //Skriver in inställning på objektet
                 TypeNameHandling = TypeNameHandling.Auto
-                // Lägg till andra inställningar om det behövs
+                
             };
 
             _fileService.SaveContentToFile(JsonConvert.SerializeObject(_contactList, settings));
@@ -38,24 +50,36 @@ public class ContactsServices : IContactsServices
         var findContact = _contactList.Find(x => x.Email == mail.Trim());
         if (findContact != null)
         {
-            _contactList.Remove(findContact!);
+            _contactList.Remove(findContact);
+
+            var settings = new JsonSerializerSettings
+            {
+                //Skriver in inställning på objektet
+                TypeNameHandling = TypeNameHandling.Auto
+
+            };
+
+            _fileService.SaveContentToFile(JsonConvert.SerializeObject(_contactList, settings));
             return true;
+            
         }
         else
             return false;
     }
-    public IEnumerable<IContacts> GetContactsFromList()
+    public List<IContacts> GetContactsFromList()
     {
         try
         {
             //Hämtar info från min fil på datorn
             var content = _fileService.GetContentFromFile();
-            //Om filen finns går jag in i if
+            
             var settings = new JsonSerializerSettings
             {
+                //Ställer in inställningar för type
                 TypeNameHandling = TypeNameHandling.All,
                 Formatting = Formatting.Indented,
             };
+            //Om filen finns går jag in i if
             if (!string.IsNullOrEmpty(content))
             {
                 _contactList = JsonConvert.DeserializeObject<List<IContacts>>(content,settings)!;
@@ -69,7 +93,7 @@ public class ContactsServices : IContactsServices
         }
 
         // Om något går fel eller om det inte finns några kontakter returnerar vi en tom lista.
-        return (IEnumerable<IContacts>)_contactList;
+        return _contactList;
     }
     public void ViewOneContact(string mail)
     {
