@@ -12,11 +12,14 @@ public class ContactsService_Tests
     public void AddContactToListShould_AddOneContactToContactList_ThenReturnTrue()
     {
         //Arrange
-        Contacts contacts = new Contacts();
+        IContacts testContacts = new Contacts { FirstName = "Henrik", Email = "henrik@gmail.com", PhoneNumber = "07333333" };
+
+        
+
         ContactsServices contactsServices = new ContactsServices();
 
         //Act
-        bool result = contactsServices.AddContact(contacts);
+        bool result = contactsServices.AddContact((Contacts)testContacts);
 
         //Assert
         Assert.True(result);
@@ -29,7 +32,10 @@ public class ContactsService_Tests
         //Arrange0
         
         ContactsServices contactsServices = new ContactsServices();
+        IContacts testContacts = new Contacts { FirstName = "Henrik", Email = "henrik@gmail.com", PhoneNumber = "07333333" };
+        contactsServices.AddContact((Contacts)testContacts);
 
+        List<IContacts> contacts = new List<IContacts>();
         //Act
         List<IContacts> result = contactsServices.GetContactsFromList();
 
