@@ -33,6 +33,15 @@ namespace AdressBook.Interface
         /// Hämtar listan.
         /// </summary>
         /// <returns>Returnerar listan</returns>
+        List<IContacts> GetContactsFromComp();
+
+
         List<IContacts> GetContactsFromList();
+
+
+        /// <summary>
+        /// Sparar listan till fil. Alternativ i menyn
+        /// </summary>
+        bool SaveListToFile();
     }
 }

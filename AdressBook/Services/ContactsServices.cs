@@ -13,8 +13,9 @@ public class ContactsServices : IContactsServices
     private readonly IFileService _fileService = new FileService(@"C:\Projects\AdressBook\content.json");
 
     // En lista som innehåller kontakter (implementerar IContacts-gränssnittet)
-    public List<IContacts> _contactList = [];
-
+    public static List<IContacts> _contactList = [];
+    
+    
     // En statisk variabel för att hålla reda på kontakt-ID
     public static int _contactIdCounter = 1;
 
@@ -22,21 +23,13 @@ public class ContactsServices : IContactsServices
     {
         try
         {
-            // Hämtar befintliga kontakter från filen
-            List<IContacts> contacts = GetContactsFromList();
+            //Tilldelar ett Id till objektet
+            contact.Id = _contactList.Count + 1;
 
             // Lägger till den nya kontakten i listan
             _contactList.Add(contact);
 
-            // Ställer in inställningar för att hantera typer automatiskt
-            var settings = new JsonSerializerSettings
-            {
-                //Skriver in inställning på objektet
-                TypeNameHandling = TypeNameHandling.Auto
-                
-            };
-
-            _fileService.SaveContentToFile(JsonConvert.SerializeObject(_contactList, settings));
+            
             return true;
         }
         catch (Exception ex)
@@ -52,6 +45,19 @@ public class ContactsServices : IContactsServices
         {
             _contactList.Remove(findContact);
 
+           
+            return true;
+            
+        }
+        else
+            return false;
+    }
+    public bool SaveListToFile()
+    {
+       
+        try
+        {
+            // Ställer in inställningar för att hantera typer automatiskt
             var settings = new JsonSerializerSettings
             {
                 //Skriver in inställning på objektet
@@ -61,12 +67,18 @@ public class ContactsServices : IContactsServices
 
             _fileService.SaveContentToFile(JsonConvert.SerializeObject(_contactList, settings));
             return true;
-            
+
+
+
         }
-        else
-            return false;
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+        return false;
+        
     }
-    public List<IContacts> GetContactsFromList()
+    public List<IContacts> GetContactsFromComp()
     {
         try
         {
@@ -86,6 +98,7 @@ public class ContactsServices : IContactsServices
                 
                 
             }
+            return _contactList;
         }
         catch (Exception ex)
         {
@@ -93,7 +106,22 @@ public class ContactsServices : IContactsServices
         }
 
         // Om något går fel eller om det inte finns några kontakter returnerar vi en tom lista.
-        return _contactList;
+        return null!;
+    }
+    public List<IContacts> GetContactsFromList()
+    {
+        try
+        {
+           
+            return _contactList;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+
+        // Om något går fel eller om det inte finns några kontakter returnerar vi en tom lista.
+        return null!;
     }
     public void ViewOneContact(string mail)
     {

@@ -1,1 +1,1 @@
-[]
+[{"$type":"AdressBook.Models.Contacts, AdressBook","Email":"erik@gmail.com","FirstName":"Erik","HomeAdress":"Lindome","PhoneNumber":"04353453","Id":2},{"$type":"AdressBook.Models.Contacts, AdressBook","Email":"helena@gmail.com","FirstName":"Helena","HomeAdress":"Frillesås","PhoneNumber":"435534","Id":3}]

@@ -6,8 +6,10 @@ namespace AdressBook.Services;
 public class MenuServices : IMenuServices
 {
     private readonly IContactsServices _contactsServices = new ContactsServices();
+
     public void ShowMainMenu()
     {
+        
         while (true)
         {
             Console.Clear();
@@ -18,11 +20,15 @@ public class MenuServices : IMenuServices
             Console.WriteLine();
             Console.WriteLine(" 2. VIEW CONTACTS");
             Console.WriteLine();
-            Console.WriteLine(" 3. VIEW CONTACT");
+            Console.WriteLine(" 3  VIEW CONTACT");
             Console.WriteLine();
-            Console.WriteLine(" 4. REMOVE CONTACT");
+            Console.WriteLine(" 4. LOAD YOUR BOOK FROM COMP");
             Console.WriteLine();
-            Console.WriteLine(" 6. EXIT");
+            Console.WriteLine(" 5. REMOVE CONTACT");
+            Console.WriteLine();
+            Console.WriteLine(" 6. SAVE BOOK TO COMP");
+            Console.WriteLine();
+            Console.WriteLine(" 0. EXIT");
             Console.WriteLine();    
             Console.Write("What would you like to do? :");
             var answer = Console.ReadLine();  
@@ -37,15 +43,23 @@ public class MenuServices : IMenuServices
                     ShowAllUsersMenu();
                     break;
 
-                case "3":
+                 case "3":
                     ShowOneUserMenu();
                     break;
 
                 case "4":
+                    ShowAllUsersFromCompMenu();
+                    break;
+
+                case "5":
                     ShowRemoveContactMenu();                   
                     break;
-                
+
                 case "6":
+                    ShowSaveMenu();
+                    break;
+                
+                case "0":
                     ExitApplication();
                     break;
                 default:
@@ -54,10 +68,26 @@ public class MenuServices : IMenuServices
             }
         }
     }
+    public void ShowSaveMenu()
+    {
+        Console.Clear();
+        Console.WriteLine("Are you sure you want to save? This will overwrite last saved adressbook?");
+        Console.WriteLine("y/n?");
+        var answer = Console.ReadLine()!.ToLower();
+        if(answer == "y")
+        {
+            bool result = _contactsServices.SaveListToFile();
+            if (result)
+            {
+                Console.WriteLine("File saved.");
+            }
+        }
+        Console.ReadLine();
+    }
     public void ShowAddMenu()
     {
         Contacts contacts = new Contacts();
-        contacts.Id = ContactsServices._contactIdCounter++;
+        
 
         Console.Clear();
         Display("Add Menu");
@@ -82,15 +112,51 @@ public class MenuServices : IMenuServices
         }
         Console.ReadKey();
     }
+    private void ShowAllUsersFromCompMenu()
+    {
+        Console.Clear();
+        Console.WriteLine("Are you sure you want to load? If you dont save first your list will be lost");
+        Console.WriteLine();
+        Console.WriteLine("y/n?");
+        var answer = Console.ReadLine()!.ToLower();
+        if (answer == "y")
+        {
+
+            Console.Clear();
+            Display("CONTACTS:");
+
+            List<IContacts> contacts = _contactsServices.GetContactsFromComp();
+            if (contacts.Count > 0)
+            {
+                foreach (var contact in contacts)
+                {
+                    Console.WriteLine($"Id: {contact.Id}");
+                    Console.WriteLine($"FirstName: {contact.FirstName}");
+                    Console.WriteLine($"Phone: {contact.PhoneNumber}");
+                    Console.WriteLine($"Email: {contact.Email}");
+                    Console.WriteLine($"HomeAdress: {contact.HomeAdress}");
+                    Console.WriteLine("-----------------------------------");
+                }
+            }
+            else
+            {
+                Console.WriteLine("The list is empty. Press any button to continue..");
+            }
+
+
+            Console.ReadKey();
+        }
+    }
+
     private void ShowAllUsersMenu()
     {
         Console.Clear();
         Display("CONTACTS:");
 
-        List<IContacts> contacts = _contactsServices.GetContactsFromList();
-        if (contacts.Count > 0) 
+        var list = _contactsServices.GetContactsFromList();
+        if (list.Count > 0)
         {
-            foreach (var contact in contacts)
+            foreach (var contact in list)
             {
                 Console.WriteLine($"Id: {contact.Id}");
                 Console.WriteLine($"FirstName: {contact.FirstName}");
@@ -100,11 +166,11 @@ public class MenuServices : IMenuServices
                 Console.WriteLine("-----------------------------------");
             }
         }
-        else 
+        else
         {
             Console.WriteLine("The list is empty. Press any button to continue..");
         }
-       
+
 
         Console.ReadKey();
     }
