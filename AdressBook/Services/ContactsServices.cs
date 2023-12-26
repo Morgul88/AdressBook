@@ -19,6 +19,7 @@ public class ContactsServices : IContactsServices
     // En statisk variabel för att hålla reda på kontakt-ID
     public static int _contactIdCounter = 1;
 
+    //github test
     public bool AddContact(Contacts contact)
     {
         try
